@@ -1,4 +1,9 @@
 .idea/
+Include/
+tcl/
+Scripts/
+pip-selfcheck.json
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
