@@ -5,20 +5,23 @@ rows = []
 for row in lines:
     rows.append(int(row))
 
-freqH = []
+freqH = set()
 
 freq = 0
-freqH.append(freq)
+freqH.add(freq)
 dup = False
+
+part1 = sum(x for x in rows)
+part2 = 0
 
 while not dup:
     for row in rows:
         freq += row
         if freq in freqH:
-            print(f"dup: {freq}")
+            part2 = freq
             dup = True
             break
-        freqH.append(freq)
-    print(freq)
+        freqH.add(freq)
 
-print(f"{freq}")
+print(f"part1: {part1}")
+print(f"part2: {part2}")
