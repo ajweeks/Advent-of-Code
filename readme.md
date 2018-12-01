@@ -1,6 +1,6 @@
-# Advent of Code 2017 Solutions
+# Advent of Code Solutions
 
-This is a repository for my personal solutions to the [Advent of Code 2017](http://adventofcode.com/2017) problems.
+This is a repository for my personal solutions to the [Advent of Code](http://adventofcode.com/) problems.
 
-Twitter [@liqwidice](https://twitter.com/liqwidice)
-[Website](http://ajweeks.com/)
+https://twitter.com/liqwidice
+http://ajweeks.com/
