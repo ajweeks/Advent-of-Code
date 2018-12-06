@@ -57,7 +57,15 @@ for yy in range(max_y):
 
 for yy in range(max_y):
     for xx in range(max_x):
-        print(chr(ord('A') + grid[yy * max_x + xx]), end='')
+        c = False
+        for j in range(len(coords)):
+            if coords[j][0] == xx and coords[j][1] == yy:
+                c = True
+                break
+        if c:
+            print("$", end='')
+        else:
+            print(chr(ord('A') + grid[yy * max_x + xx]), end='')
     print()
 
 largestFiniteSize = 0
@@ -77,7 +85,16 @@ coverage = sorted(coverage, reverse=True)
 print(coverage[0][0], chr(ord('A') + coverage[0][1]), coverage)
 
 for i in range(len(coverage)):
-    if 0 < coords[coverage[i][1]][0] < max_x  and \
-       0 < coords[coverage[i][1]][1] < max_y :
-       print(chr(ord('A') + coverage[i][1]), coverage[i])
-       break
+    onEdge = False
+    for yy in range(max_y):
+        for xx in range(max_x):
+            if grid[yy * max_x + xx] == coverage[i][1]:
+                if xx <= 0 or xx > max_x - 1 or \
+                   yy <= 0 or yy > max_y - 1:
+                    onEdge = True
+                    break
+        if onEdge:
+            break
+    if not onEdge:
+        print(chr(ord('A') + coverage[i][1]), coverage[i])
+
