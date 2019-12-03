@@ -1,7 +1,5 @@
 # Advent of Code Solutions
 
-This is a repository for my personal solutions to the [Advent of Code](http://adventofcode.com/) problems.
+The final resting place of my solutions to the [Advent of Code](http://adventofcode.com/) problems.
 
-https://twitter.com/liqwidice
-
-http://ajweeks.com/
+Definitely don't read any code in this repository... it's half golfed, half hacked together, and fully terrible.
