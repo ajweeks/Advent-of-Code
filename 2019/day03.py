@@ -1,5 +1,5 @@
 def get_inputs():
-    return [y.split(',') for y in [x for x in open("day3.in").readlines()]]
+    return [y.split(',') for y in [x for x in open("day03.in").readlines()]]
 
 
 def is_horiz(seg):

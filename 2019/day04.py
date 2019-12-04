@@ -1,5 +1,5 @@
 def get_inputs():
-    return [int(y) for y in open("day4.in").readlines()[0].split('-')]
+    return [int(y) for y in open("day04.in").readlines()[0].split('-')]
 
 
 def meets_criteria(num, p2):

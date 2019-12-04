@@ -1,11 +1,11 @@
 
-import day1, day2, day3, day4
+import day01, day02, day03, day04
 
 funcs = [
-    (day1.part1, day1.part2),
-    (day2.part1, day2.part2),
-    (day3.part1, day3.part2),
-    (day4.part1, day4.part2),
+    (day01.part1, day01.part2),
+    (day02.part1, day02.part2),
+    (day03.part1, day03.part2),
+    (day04.part1, day04.part2),
 ]
 
 
@@ -19,11 +19,11 @@ def print_all():
 
 
 def print_pair(idx, pair):
-    print("Day ", idx + 1, ":\n\t", sep='', end='')
+    print("Day ", str(idx + 1).zfill(2), ":\n\t", sep='', end='')
     pair[0]()
     print("\t", end='')
     pair[1]()
 
 
-# print_all()
-print_latest()
+print_all()
+# print_latest()

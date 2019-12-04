@@ -1,6 +1,6 @@
 
 def get_input():
-    return [int(x.replace('\n', '')) for x in open("day1.in").readlines()]
+    return [int(x.replace('\n', '')) for x in open("day01.in").readlines()]
 
 
 def part1():

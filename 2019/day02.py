@@ -1,6 +1,6 @@
 
 def get_inputs():
-    return [int(x) for x in open("day2.in").readlines()[0].split(',')]
+    return [int(x) for x in open("day02.in").readlines()[0].split(',')]
 
 
 def part1():
