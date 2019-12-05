@@ -20,9 +20,8 @@ def print_all():
 
 
 def print_pair(idx, pair):
-    print("Day ", str(idx + 1).zfill(2), ":\n\t", sep='', end='')
+    print("--== Day ", str(idx + 1).zfill(2), " ==--", sep='')
     pair[0]()
-    print("\t", end='')
     pair[1]()
 
 
