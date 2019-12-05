@@ -25,28 +25,29 @@ def retrieve(modes, inputs, inst_ptr, param_count):
 
 def run(inputs):
     i = 0
-    input = 1
-    output = 0
+    register0 = 1
     while i < len(inputs):
         opcode, modes = decode_input(inputs[i])
 
         if opcode == 1:  # Add
-            inputs[inputs[i + 3]] = inputs[inputs[i + 1]] + inputs[inputs[i + 2]]
+            [in0, in1] = retrieve(modes, inputs, i + 1, 2)
+            inputs[inputs[i + 3]] = in0 + in1
             i += 4
         elif opcode == 2:  # Multiply
             [in0, in1] = retrieve(modes, inputs, i + 1, 2)
             inputs[inputs[i + 3]] = in0 * in1
             i += 4
-        elif opcode == 3:  # Store
-            output = inputs[inputs[i + 1]]
-            print("store:", output)
+        elif opcode == 3:  # Load
+            inputs[inputs[i + 1]] = register0
+            print("load:", register0)
             i += 2
-        elif opcode == 4:  # Load
-            inputs[inputs[i + 1]] = input
+        elif opcode == 4:  # Store
+            register0 = inputs[inputs[i + 1]]
+            print("store:", register0)
             i += 2
         else:
             if inputs[i] == 99:
-                print("output:", output)
+                print("halted with output:", register0)
             else:
                 print("Unhandled opcode: ", opcode)
             break
