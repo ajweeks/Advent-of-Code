@@ -10,7 +10,7 @@ def part1():
     inputs = get_inputs()
     inputs[1] = 12
     inputs[2] = 2
-    print(intcode.run(inputs))
+    print(intcode.run(inputs, 1, False))
 
 
 def part2():
@@ -21,7 +21,7 @@ def part2():
             inputs = initial_inputs.copy()
             inputs[1] = n
             inputs[2] = v
-            if intcode.run(inputs) == 19690720:
+            if intcode.run(inputs, 1, False) == 19690720:
                 result = 100 * n + v
                 print(result)
                 break
