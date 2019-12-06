@@ -1,5 +1,5 @@
 
-import day01, day02, day03, day04, day05
+import day01, day02, day03, day04, day05, day06
 
 funcs = [
     (day01.part1, day01.part2),
@@ -7,6 +7,7 @@ funcs = [
     (day03.part1, day03.part2),
     (day04.part1, day04.part2),
     (day05.part1, day05.part2),
+    (day06.part1, day06.part2),
 ]
 
 
