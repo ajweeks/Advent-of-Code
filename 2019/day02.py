@@ -10,7 +10,10 @@ def part1():
     inputs = get_inputs()
     inputs[1] = 12
     inputs[2] = 2
-    print(intcode.run(inputs, 1, False))
+    comp = intcode.Intcode()
+    comp.receive_signal(1)
+    result = comp.run(inputs, False, False)
+    return result
 
 
 def part2():
@@ -21,12 +24,14 @@ def part2():
             inputs = initial_inputs.copy()
             inputs[1] = n
             inputs[2] = v
-            if intcode.run(inputs, 1, False) == 19690720:
+            comp = intcode.Intcode()
+            comp.receive_signal(1)
+            if comp.run(inputs, False, False) == 19690720:
                 result = 100 * n + v
-                print(result)
                 break
 
             if result != -1:
                 break
         if result != -1:
             break
+    return result

@@ -6,7 +6,7 @@ def get_input():
 def part1():
     lines = get_input()
     s = sum([int(x / 3 - 2) for x in lines])
-    print(s)
+    return s
 
 
 def part2():
@@ -18,6 +18,4 @@ def part2():
             xs = int(xs / 3 - 2)
             if xs > 0:
                 s += xs
-
-    print(s)
-
+    return s

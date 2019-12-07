@@ -1,3 +1,4 @@
+
 def get_inputs():
     return [y.split(',') for y in [x for x in open("day03.in").readlines()]]
 
@@ -60,23 +61,6 @@ def get_segs():
     return all_line_segs
 
 
-def part1():
-    all_line_segs = get_segs()
-    closest_crossing = ((99999, 99999), 99999)  # (x, y), steps
-
-    for wire_index in range(len(all_line_segs)):
-        for seg in all_line_segs[wire_index]:
-            for wire_index2 in range(wire_index + 1, len(all_line_segs)):
-                for seg2 in all_line_segs[wire_index2]:
-                    cross = intersect(seg[0], seg2[0])
-                    if cross is not None:
-                        dist = manhattan(cross)
-                        if dist < manhattan(closest_crossing[0]):
-                            closest_crossing = (cross, 0)
-
-    print(closest_crossing[0], manhattan(closest_crossing[0]))
-
-
 def additional_steps(p_seg, n_seg, crossing):
     if is_horiz(n_seg):
         if n_seg[0] == p_seg[0] or n_seg[0] == p_seg[1]:
@@ -101,6 +85,7 @@ def additional_steps(p_seg, n_seg, crossing):
         else:
             assert False
 
+
 def dist_to_point(segs, point):
     dist = 0
     for seg_i in range(len(segs)):
@@ -116,6 +101,23 @@ def dist_to_point(segs, point):
                 dist -= additional_steps(((0,0),(0,0)) if seg_i == 0 else segs[seg_i-1][0], segs[seg_i][0], point)
                 return dist
     return -1
+
+
+def part1():
+    all_line_segs = get_segs()
+    closest_crossing = ((99999, 99999), 99999)  # (x, y), steps
+
+    for wire_index in range(len(all_line_segs)):
+        for seg in all_line_segs[wire_index]:
+            for wire_index2 in range(wire_index + 1, len(all_line_segs)):
+                for seg2 in all_line_segs[wire_index2]:
+                    cross = intersect(seg[0], seg2[0])
+                    if cross is not None:
+                        dist = manhattan(cross)
+                        if dist < manhattan(closest_crossing[0]):
+                            closest_crossing = (cross, 0)
+
+    return manhattan(closest_crossing[0])
 
 
 def part2():
@@ -135,4 +137,4 @@ def part2():
                         if total_dist < closest_crossing[1]:
                             closest_crossing = (cross, total_dist)
 
-    print(closest_crossing[0], closest_crossing[1])
+    return closest_crossing[1]

@@ -1,3 +1,4 @@
+
 def get_inputs():
     return [int(y) for y in open("day04.in").readlines()[0].split('-')]
 
@@ -45,12 +46,12 @@ def get_count(p2):
     for i in range(inputs[0], inputs[1]+1):
         if meets_criteria(i, p2):
             count += 1
-    print(count)
+    return count
 
 
 def part1():
-    get_count(False)
+    return get_count(False)
 
 
 def part2():
-    get_count(True)
+    return get_count(True)

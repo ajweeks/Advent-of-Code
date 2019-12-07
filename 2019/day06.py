@@ -1,4 +1,3 @@
-
 def get_input_str():
     return open("day06.in").readlines()
 
@@ -94,7 +93,7 @@ def part1():
 
     root.find_direct_children(inputs)
     # root.print_self()
-    print(root.count_orbits())
+    return root.count_orbits()
 
 
 def part2():
@@ -114,6 +113,6 @@ def part2():
 
     common_ancestor = you.common_ancestor(santa)
 
-    print(you.indirect_orbits - common_ancestor.indirect_orbits +
-          santa.indirect_orbits - common_ancestor.indirect_orbits
-          - 2)
+    return (you.indirect_orbits - common_ancestor.indirect_orbits +
+            santa.indirect_orbits - common_ancestor.indirect_orbits
+            - 2)
