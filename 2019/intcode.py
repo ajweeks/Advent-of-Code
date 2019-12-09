@@ -2,23 +2,39 @@
 def decode_input(op):
     opcode = op % 100
     mode_bits = int(op / 100)
-    modes = [0] * 3
+    modes = [0] * 8
     mode_idx = 0
     while mode_bits:
         if mode_bits % 10:
-            modes[mode_idx] = 1
+            modes[mode_idx] = mode_bits % 10
         mode_bits = int(mode_bits / 10)
         mode_idx += 1
     return opcode, modes
 
 
-def retrieve(modes, inputs, inst_ptr, param_count):
+def retrieve(modes, inputs, inst_ptr, param_count, relative_base):
     values = []
     for i in range(param_count):
         if modes[i] == 0:  # Position
             values.append(inputs[inputs[inst_ptr + i]])
-        elif modes[i] == 1:  # Immediate:
+        elif modes[i] == 1:  # Immediate
             values.append(inputs[inst_ptr + i])
+        elif modes[i] == 2:  # Relative
+            values.append(inputs[relative_base + inputs[inst_ptr + i]])
+        else:
+            assert False
+    return values
+
+
+def retrieve_address(modes, inputs, inst_ptr, param_count, relative_base):
+    values = []
+    for i in range(param_count):
+        if modes[i] == 0:  # Position
+            values.append(inputs[inst_ptr + i])
+        elif modes[i] == 1:  # Immediate
+            values.append(inst_ptr + i)
+        elif modes[i] == 2:  # Relative
+            values.append(relative_base + inputs[inst_ptr + i])
         else:
             assert False
     return values
@@ -30,6 +46,7 @@ class Intcode:
         self.outputs = []
         self.inst_ptr = 0
         self.complete = False
+        self.relative_base = 0
 
     def receive_signal(self, signal):
         self.signals.append(signal)
@@ -43,27 +60,29 @@ class Intcode:
             # print("opcode, modes:  ", opcode, ", ", modes, sep='')
 
             if opcode == 1:  # Add
-                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2)
-                inputs[inputs[self.inst_ptr + 3]] = in0 + in1
+                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
+                [in2] = retrieve_address(modes[2:], inputs, self.inst_ptr + 3, 1, self.relative_base)
+                inputs[in2] = in0 + in1
                 self.inst_ptr += 4
             elif opcode == 2:  # Multiply
-                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2)
-                inputs[inputs[self.inst_ptr + 3]] = in0 * in1
+                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
+                [in2] = retrieve_address(modes[2:], inputs, self.inst_ptr + 3, 1, self.relative_base)
+                inputs[in2] = in0 * in1
                 self.inst_ptr += 4
             elif opcode == 3:  # Load
                 if len(self.signals) > 0:
-                    inputs[inputs[self.inst_ptr + 1]] = self.signals.pop(0)
-                    assert (modes[0] == modes[1] == 0)
+                    [in0] = retrieve_address(modes, inputs, self.inst_ptr + 1, 1, self.relative_base)
+                    inputs[in0] = self.signals.pop(0)
                     self.inst_ptr += 2
                 else:
                     assert len(self.outputs) > 0
                     return self.outputs.pop()  # Waiting on a signal
             elif opcode == 4:  # Store
-                [in0] = retrieve(modes, inputs, self.inst_ptr + 1, 1)
+                [in0] = retrieve(modes, inputs, self.inst_ptr + 1, 1, self.relative_base)
                 self.outputs.append(in0)
                 self.inst_ptr += 2
             elif opcode == 5:  # jump if true
-                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2)
+                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
                 if in0:
                     self.inst_ptr = in1
                     if self.inst_ptr > len(inputs):
@@ -71,7 +90,7 @@ class Intcode:
                 else:
                     self.inst_ptr += 3
             elif opcode == 6:  # jump if false
-                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2)
+                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
                 if not in0:
                     self.inst_ptr = in1
                     if self.inst_ptr > len(inputs):
@@ -79,13 +98,19 @@ class Intcode:
                 else:
                     self.inst_ptr += 3
             elif opcode == 7:  # less than
-                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2)
-                inputs[inputs[self.inst_ptr + 3]] = 1 if (in0 < in1) else 0
+                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
+                [in2] = retrieve_address(modes[2:], inputs, self.inst_ptr + 3, 1, self.relative_base)
+                inputs[in2] = 1 if (in0 < in1) else 0
                 self.inst_ptr += 4
             elif opcode == 8:  # equals
-                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2)
-                inputs[inputs[self.inst_ptr + 3]] = 1 if (in0 == in1) else 0
+                [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
+                [in2] = retrieve_address(modes[2:], inputs, self.inst_ptr + 3, 1, self.relative_base)
+                inputs[in2] = 1 if (in0 == in1) else 0
                 self.inst_ptr += 4
+            elif opcode == 9:  # adjust relative base
+                [in0] = retrieve(modes, inputs, self.inst_ptr + 1, 1, self.relative_base)
+                self.relative_base += in0
+                self.inst_ptr += 2
             else:
                 if inputs[self.inst_ptr] == 99:
                     if print_halt_codes:

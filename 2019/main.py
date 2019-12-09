@@ -1,5 +1,5 @@
 
-import day01, day02, day03, day04, day05, day06, day07, day08
+import day01, day02, day03, day04, day05, day06, day07, day08, day09
 import logging
 
 pairs = [
@@ -11,6 +11,7 @@ pairs = [
     (day06.part1, day06.part2, 144909, 259),
     (day07.part1, day07.part2, 17790, 19384820),
     (day08.part1, day08.part2, 2032, "CFCUG"),
+    (day09.part1, day09.part2, 3906448201, 59785),
 ]
 
 
@@ -33,18 +34,18 @@ def run_pair(idx, pair):
     r1 = pair[1]()
     success = True
     if len(pair) > 2 and r0 != pair[2]:
-        logging.error(f" Regression! Expected {pair[2]}, Got: {r1}")
+        logging.error(" Regression! Expected " + pair[2] + ", Got: " + r1)
         success = False
     else:
         print(r0)
 
     if len(pair) > 2 and r1 != pair[3]:
-        logging.error(f" Regression! Expected {pair[3]}, Got: {r1}")
+        logging.error(" Regression! Expected " + pair[3] + ", Got: " + r1)
         success = False
     else:
         print(r1)
 
     return success
 
-run_all()
-# run_latest()
+# run_all()
+run_latest()
