@@ -1,5 +1,6 @@
-
 import math
+
+# ========= ⚠ WARNING: GROSS CODE LIES AHEAD: BE WARNED ⚠ ========= #
 
 
 def get_input_str():
@@ -40,14 +41,13 @@ def get_visible_asteroids(pos, field, print_asteroids=False):
         for x, cell in enumerate(row):
             if cell == 0 or (x, y) == pos:
                 continue
-            ratio = reduce(x-pos[0], y-pos[1])
-            dist = manhattan(x-pos[0], y-pos[1])
+            ratio = reduce(x - pos[0], y - pos[1])
+            dist = manhattan(x - pos[0], y - pos[1])
             if ratio in seen.keys():
                 if dist < seen[ratio][0]:
                     seen[ratio] = (dist, (x, y))
             else:
                 seen[ratio] = (dist, (x, y))
-            # print(ratio)
 
     if print_asteroids:
         for key, value in seen:
@@ -58,26 +58,6 @@ def get_visible_asteroids(pos, field, print_asteroids=False):
 
 def part1():
     inputs = get_inputs(get_input_str())
-    inputs2 = get_inputs(""".#..##.###...#######
-##.############..##.
-.#.######.########.#
-.###.#######.####.#.
-#####.##.#.##.###.##
-..#####..#.#########
-####################
-#.####....###.#.#.##
-##.#################
-#####.##.###..####..
-..######..##.#######
-####.##.####...##..#
-.#####..#.######.###
-##...#.##########...
-#.##########.#######
-.####.#.###.###.#.##
-....##.##.###..#####
-.#.#.###########.###
-#.#.#.#####.####.###
-###.##.####.##.#..##""".split('\n'))
     field = []
     for line in inputs:
         field.append([1 if x == '#' else 0 for x in line])
@@ -93,32 +73,37 @@ def part1():
                     best_asteroid_count = a_count
                     best_asteroid = (x, y)
 
-    print(best_asteroid, best_asteroid_count)
+    # print(best_asteroid, best_asteroid_count)
     # count_line_of_sight(best_asteroid, field, True)
 
     return best_asteroid_count
 
 
+# Find the closest asteroid that is at or in front of (clockwise from) the current laser angle
 def next_asteroid(laser_angle, visible_asteroids, laser_pos, quadrant):
-    max_angle = laser_angle - math.pi
-    if max_angle < -2 * math.pi:
-        max_angle += 4 * math.pi
+    max_angle = laser_angle - math.pi / 2.0
+    if quadrant == 2:
+        max_angle = -math.pi
 
     next_roid = None
     for asteroid in visible_asteroids.values():
-        angle = math.atan2(asteroid[1][1] - laser_pos[1], asteroid[1][0] - laser_pos[0])
-        if ((quadrant == 0 or quadrant == 1) and (max_angle < angle <= laser_angle)) or\
-           ((quadrant == 3 or quadrant == 2) and (max_angle < angle <= laser_angle)):
-            if next_roid is None or asteroid[0] < next_roid[0]:
+        angle = math.atan2(-(asteroid[1][1] - laser_pos[1]), asteroid[1][0] - laser_pos[0])
+
+        if max_angle <= angle <= laser_angle:
+            if next_roid is None or (max_angle != angle or (max_angle == angle and asteroid[0] < next_roid[0])):
                 max_angle = angle
                 next_roid = asteroid
 
-    return next_roid, max_angle - 0.0001
+    if quadrant == 2 and next_roid is None:  # Yikeroonies
+        quadrant = 1
+        return next_asteroid(math.pi, visible_asteroids, laser_pos, quadrant)
+
+    return next_roid, max_angle - 0.000001
 
 
 def part2():
     inputs = get_inputs(get_input_str())
-    inputs = get_inputs(""".#..##.###...#######
+    inputs2 = get_inputs(""".#..##.###...#######
 ##.############..##.
 .#.######.########.#
 .###.#######.####.#.
@@ -153,46 +138,40 @@ def part2():
                     best_asteroid_count = len(visible_asteroids)
                     best_asteroid = (x, y)
 
-    # best_asteroid = ()
-
-    # print(best_asteroid, best_asteroid_count)
     visible_asteroids = get_visible_asteroids(best_asteroid, field)
 
     exploded_asteroid_count = 0
     asteroid_200 = None
     quadrant = 0
-    laser_angle = math.pi
+    laser_angle = math.pi / 2.0
     while 1:
         asteroid, laser_angle = next_asteroid(laser_angle, visible_asteroids, best_asteroid, quadrant)
         if asteroid is None:
-            if sum([sum(x) for x in field]) == 0:
-                break
-            # quadrant -= 1
-            # if quadrant < 0:
-            #     quadrant = 3
+            print("UH OH!")
+            break
         else:
             asteroid_pos = asteroid[1]
             field[asteroid_pos[1]][asteroid_pos[0]] = 0  # Boom!
             exploded_asteroid_count += 1
-            print("exploded ", asteroid_pos, "laser angle", laser_angle)
+            # print("explosion", exploded_asteroid_count, "at", asteroid_pos, "- laser angle:", laser_angle, "- quadrant:", quadrant)
 
             if exploded_asteroid_count == 200:
                 asteroid_200 = asteroid
-                print("200!", asteroid)
+                # print("200!", asteroid)
                 break
 
         if quadrant == 0 and laser_angle <= 0.0:
             quadrant = 3
-            print("quadrant", quadrant, "vis: ", len(visible_asteroids))
-        elif quadrant == 3 and laser_angle <= -math.pi:
+            # print("quadrant", quadrant, "vis: ", len(visible_asteroids))
+        elif quadrant == 3 and laser_angle <= -math.pi / 2.0:
             quadrant = 2
-            print("quadrant", quadrant, "vis: ", len(visible_asteroids))
+            # print("quadrant", quadrant, "vis: ", len(visible_asteroids))
         elif quadrant == 2 and laser_angle >= 0.0:
             quadrant = 1
-            print("quadrant", quadrant, "vis: ", len(visible_asteroids))
-        elif quadrant == 1 and laser_angle <= math.pi:
+            # print("quadrant", quadrant, "vis: ", len(visible_asteroids))
+        elif quadrant == 1 and laser_angle <= math.pi / 2.0:
             quadrant = 0
-            print("quadrant", quadrant, "vis: ", len(visible_asteroids))
+            # print("quadrant", quadrant, "vis: ", len(visible_asteroids))
 
         visible_asteroids = get_visible_asteroids(best_asteroid, field)
         if len(visible_asteroids) == 0:
