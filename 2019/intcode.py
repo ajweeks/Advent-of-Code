@@ -47,14 +47,12 @@ class Intcode:
         self.inst_ptr = 0
         self.complete = False
         self.relative_base = 0
+        self.is_halted = False
 
     def receive_signal(self, signal):
         self.signals.append(signal)
 
-    def is_complete(self):
-        return self.complete
-
-    def run(self, inputs, print_halt_codes=True, return_halt_codes=False):
+    def run(self, inputs, print_halt_codes=True, return_halt_codes=False, return_on_two_outputs=False):
         while self.inst_ptr < len(inputs):
             opcode, modes = decode_input(inputs[self.inst_ptr])
             # print("opcode, modes:  ", opcode, ", ", modes, sep='')
@@ -81,6 +79,8 @@ class Intcode:
                 [in0] = retrieve(modes, inputs, self.inst_ptr + 1, 1, self.relative_base)
                 self.outputs.append(in0)
                 self.inst_ptr += 2
+                if len(self.outputs) == 2 and return_on_two_outputs:
+                    return self.outputs.pop(0)
             elif opcode == 5:  # jump if true
                 [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
                 if in0:
@@ -113,6 +113,7 @@ class Intcode:
                 self.inst_ptr += 2
             else:
                 if inputs[self.inst_ptr] == 99:
+                    self.is_halted = True
                     if print_halt_codes:
                         print(self.outputs)
                 else:

@@ -91,7 +91,7 @@ def part2():
                             ampE.receive_signal(out)
                             out = ampE.run(inputs, False, True)
 
-                            if not ampA.is_complete() or not ampB.is_complete() or not ampC.is_complete() or not ampD.is_complete() or not ampE.is_complete():
+                            if not ampA.complete or not ampB.complete or not ampC.complete or not ampD.complete or not ampE.complete:
                                 ampA.receive_signal(out)
                             else:
                                 final_out = out

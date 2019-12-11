@@ -1,5 +1,5 @@
 
-import day01, day02, day03, day04, day05, day06, day07, day08, day09, day10
+import day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day11
 import logging
 
 pairs = [
@@ -13,6 +13,7 @@ pairs = [
     (day08.part1, day08.part2, 2032, "CFCUG"),
     (day09.part1, day09.part2, 3906448201, 59785),
     (day10.part1, day10.part2, 329, 512),
+    (day11.part1, day11.part2),
 ]
 
 
@@ -47,6 +48,7 @@ def run_pair(idx, pair):
         print(r1)
 
     return success
+
 
 # run_all()
 run_latest()
