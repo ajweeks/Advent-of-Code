@@ -13,7 +13,7 @@ pairs = [
     (day08.part1, day08.part2, 2032, "CFCUG"),
     (day09.part1, day09.part2, 3906448201, 59785),
     (day10.part1, day10.part2, 329, 512),
-    (day11.part1, day11.part2),
+    (day11.part1, day11.part2, 2373, "PCKRLPUK"),
 ]
 
 
