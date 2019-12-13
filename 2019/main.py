@@ -1,5 +1,5 @@
 
-import day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day11, day13
+import day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day11, day12, day13
 import logging
 
 pairs = [
@@ -14,6 +14,7 @@ pairs = [
     (day09.part1, day09.part2, 3906448201, 59785),
     (day10.part1, day10.part2, 329, 512),
     (day11.part1, day11.part2, 2373, "PCKRLPUK"),
+    (day12.part1, day12.part2),
     (day13.part1, day13.part2),
 ]
 
