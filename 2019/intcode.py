@@ -52,7 +52,7 @@ class Intcode:
     def receive_signal(self, signal):
         self.signals.append(signal)
 
-    def run(self, inputs, print_halt_codes=True, return_halt_codes=False, return_on_two_outputs=False):
+    def run(self, inputs, print_halt_codes=True, return_halt_codes=False, yield_on_output_count=-1, get_input=None, on_output=None):
         while self.inst_ptr < len(inputs):
             opcode, modes = decode_input(inputs[self.inst_ptr])
             # print("opcode, modes:  ", opcode, ", ", modes, sep='')
@@ -68,8 +68,11 @@ class Intcode:
                 inputs[in2] = in0 * in1
                 self.inst_ptr += 4
             elif opcode == 3:  # Load
-                if len(self.signals) > 0:
-                    [in0] = retrieve_address(modes, inputs, self.inst_ptr + 1, 1, self.relative_base)
+                [in0] = retrieve_address(modes, inputs, self.inst_ptr + 1, 1, self.relative_base)
+                if get_input is not None:
+                    inputs[in0] = get_input()
+                    self.inst_ptr += 2
+                elif len(self.signals) > 0:
                     inputs[in0] = self.signals.pop(0)
                     self.inst_ptr += 2
                 else:
@@ -77,10 +80,14 @@ class Intcode:
                     return self.outputs.pop()  # Waiting on a signal
             elif opcode == 4:  # Store
                 [in0] = retrieve(modes, inputs, self.inst_ptr + 1, 1, self.relative_base)
-                self.outputs.append(in0)
-                self.inst_ptr += 2
-                if len(self.outputs) == 2 and return_on_two_outputs:
-                    return self.outputs.pop(0)
+                if on_output is not None:
+                    on_output(in0)
+                    self.inst_ptr += 2
+                else:
+                    self.outputs.append(in0)
+                    self.inst_ptr += 2
+                    if len(self.outputs) == yield_on_output_count:
+                        return self.outputs.pop(0)
             elif opcode == 5:  # jump if true
                 [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
                 if in0:

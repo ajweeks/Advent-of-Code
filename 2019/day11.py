@@ -35,7 +35,7 @@ def do_paint(starting_paint_colour, print_final_board=False):
     while 1:
         pos_idx = comp_pos[1] * panel_dim + comp_pos[0]
         comp.receive_signal(panels[pos_idx])
-        paint = comp.run(inputs, False, False, True)
+        paint = comp.run(inputs, False, False, 2)
 
         if comp.is_halted:
             break
