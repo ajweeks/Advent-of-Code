@@ -1,5 +1,4 @@
 import intcode
-import math
 
 
 def get_input_str():
@@ -85,15 +84,15 @@ def part2():
                     paddle_pos_y = y
 
                 if (val == 4) and paddle_pos_x != 0:
-                    print_board()
+                    pass
+                    # print_board()
 
         out_idx = (out_idx + 1) % 3
 
     def get_input():
         global paddle_pos_y
-        b_next_pos = (ball_pos[0] + ball_vel[0] * (paddle_pos_y - ball_pos[1]))
+        b_next_pos = (ball_pos[0] + ball_vel[0] * (paddle_pos_y - ball_pos[1] - 1))
         input = 1 if (b_next_pos > paddle_pos_x) else -1 if (b_next_pos < paddle_pos_x) else 0
-        print(input)
         return input
 
     while 1:
@@ -101,14 +100,7 @@ def part2():
         comp.run(inputs, False, False, -1, get_input, on_output)
         if comp.is_halted:
             break
-        # out = comp.run(inputs, False, False, -1, get_input, on_output)
-        # if comp.is_halted:
-        #     break
-        # x = out
-        # y = comp.outputs.pop(0)
-        # type = comp.outputs.pop(0)
-        # tiles[y * w + x] = type
 
-    print_board()
+    # print_board()
 
-    return 0
+    return score
