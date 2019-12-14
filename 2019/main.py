@@ -15,7 +15,7 @@ pairs = [
     (day10.part1, day10.part2, 329, 512),
     (day11.part1, day11.part2, 2373, "PCKRLPUK"),
     (day12.part1, day12.part2),
-    (day13.part1, day13.part2),
+    # (day13.part1, day13.part2),
 ]
 
 
