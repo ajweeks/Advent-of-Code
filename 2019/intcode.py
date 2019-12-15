@@ -53,7 +53,7 @@ class Intcode:
         self.signals.append(signal)
 
     def run(self, inputs, print_halt_codes=True, return_halt_codes=False, yield_on_output_count=-1, get_input=None, on_output=None):
-        while self.inst_ptr < len(inputs):
+        while self.inst_ptr < len(inputs) and not self.is_halted:
             opcode, modes = decode_input(inputs[self.inst_ptr])
             # print("opcode, modes:  ", opcode, ", ", modes, sep='')
 
