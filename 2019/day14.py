@@ -85,9 +85,9 @@ def part2():
     while 1:
         fuel_guess = min_fuel + (max_fuel - min_fuel) // 2
         required_ore = required_ore_for_product('FUEL', fuel_guess, recipes)
-        if required_ore > 1_000_000_000_000:
+        if required_ore > 1000000000000:
             max_fuel = fuel_guess
-        elif required_ore < 1_000_000_000_000:
+        elif required_ore < 1000000000000:
             min_fuel = fuel_guess
 
         if min_fuel == max_fuel - 1:
