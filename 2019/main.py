@@ -18,7 +18,7 @@ pairs = [
     (day13.part1, day13.part2, 427, 21426),
     (day14.part1, day14.part2, 337862, 3687786),
     (day15.part1, day15.part2, 236, 368),
-    (day16.part1, day16.part2),
+    (day16.part1, day16.part2, 32002835, 69732268),
 ]
 
 
@@ -37,15 +37,15 @@ def run_all():
 
 def run_pair(idx, pair):
     print("--== Day ", str(idx + 1).zfill(2), " ==--", sep='')
-    r0 = pair[0]()
-    r1 = pair[1]()
     success = True
+    r0 = pair[0]()
     if len(pair) > 2 and r0 != pair[2]:
-        logging.error(" Regression! Expected " + pair[2] + ", Got: " + r1)
+        logging.error(" Regression! Expected " + pair[2] + ", Got: " + r0)
         success = False
     else:
         print(r0)
 
+    r1 = pair[1]()
     if len(pair) > 2 and r1 != pair[3]:
         logging.error(" Regression! Expected " + pair[3] + ", Got: " + r1)
         success = False
