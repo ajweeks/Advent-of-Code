@@ -20,7 +20,7 @@ pairs = [
     (day14.part1, day14.part2, 337862, 3687786),
     (day15.part1, day15.part2, 236, 368),
     (day16.part1, day16.part2, 32002835, 69732268),
-    (day17.part1, day17.part2),
+    (day17.part1, day17.part2, 3192, 684691),
 ]
 
 
