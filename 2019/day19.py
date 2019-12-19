@@ -11,8 +11,8 @@ def get_inputs(input_str):
 
 x = 5
 y = 5
-w = 10
-h = 10
+w = 50
+h = 50
 points = [-1] * (w * h)
 input_idx = 0
 comp = intcode.Intcode()
@@ -26,26 +26,17 @@ def print_points():
     print()
 
 
-def get_input():
-    global input_idx, x, y, w, h, comp
+def point_lit(xx, yy):
+    global comp
 
-    val = x if input_idx == 0 else y
-    input_idx = (input_idx + 1) % 2
+    inputs = get_inputs(get_input_str())
+    inputs.extend([0] * 100000)
 
-    return val
+    comp = intcode.Intcode()
 
-
-def on_output(val):
-    global x, y, w, h, points
-    points[y * w + x] = val
-
-    x = (x + 1) % w
-    if x == 0:
-        y = (y + 1) % h
-        if y == 0:
-            comp.is_halted = True
-
-    print_points()
+    comp.receive_signal(xx)
+    comp.receive_signal(yy)
+    return comp.run(inputs.copy(), False, True)
 
 
 def part1():
@@ -54,15 +45,24 @@ def part1():
     inputs = get_inputs(get_input_str())
     inputs.extend([0] * 100000)
 
-    while 1:
-        comp.run(inputs, False, False, -1, get_input, on_output)
-        comp = intcode.Intcode()
+    for yy in range(h):
+        for xx in range(w):
+            points[yy * w + xx] = point_lit(xx,yy)
 
+    # print_points()
 
     lit_points = sum(points)
-
     return lit_points
 
 
 def part2():
-    pass
+    if points[-1] == -1:
+        part1()  # Initialize points
+
+    xx = yy = 0
+    while point_lit(xx + 99, yy) == 0:
+        yy += 1
+        if point_lit(xx, yy + 99) == 0:
+            xx += 1
+
+    return xx * 10000 + yy
