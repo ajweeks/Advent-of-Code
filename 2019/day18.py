@@ -1,4 +1,3 @@
-import intcode
 
 
 def get_input_str():

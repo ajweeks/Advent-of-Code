@@ -92,6 +92,7 @@ class Intcode:
                 [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
                 if in0:
                     self.inst_ptr = in1
+                    assert(self.inst_ptr >= 0)
                     if self.inst_ptr > len(inputs):
                         print("jumped out of program! (", self.inst_ptr, ")")
                 else:
@@ -100,6 +101,7 @@ class Intcode:
                 [in0, in1] = retrieve(modes, inputs, self.inst_ptr + 1, 2, self.relative_base)
                 if not in0:
                     self.inst_ptr = in1
+                    assert(self.inst_ptr >= 0)
                     if self.inst_ptr > len(inputs):
                         print("jumped out of program! (", self.inst_ptr, ")")
                 else:
