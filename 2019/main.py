@@ -1,6 +1,6 @@
 
 import day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day11, day12, day13, day14, day15, day16
-import day17, day18, day19
+import day17, day18, day19, day20
 import logging
 
 pairs = [
@@ -23,6 +23,7 @@ pairs = [
     (day17.part1, day17.part2, 3192, 684691),
     (day18.part1, day18.part2),
     (day19.part1, day19.part2),
+    (day20.part1, day20.part2),
 ]
 
 
