@@ -9,7 +9,7 @@ const util = @import("util.zig");
 const gpa = util.gpa;
 
 pub fn main() !void {
-    var file = try std.fs.cwd().openFile("C:/Code/Advent-of-Code/2022/src/data/day01.txt", .{});
+    var file = try std.fs.cwd().openFile("src/data/day01.txt", .{});
     defer file.close();
 
     var buf_reader = std.io.bufferedReader(file.reader());
